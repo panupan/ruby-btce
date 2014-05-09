@@ -48,9 +48,16 @@ module Btce
         
         params = ""
         if options[:limit].is_a? Numeric
-          params = "?limit=#{options[:limit]}"
+          params = "?" if params.eql?("")
+          params += "limit=#{options[:limit]}"
         end
-        
+
+        if options[:order].eql?("ASC") || options[:order].eql?("DESC")
+          params = "?" if params.eql?("")
+          params += "&" unless params.eql?("?")
+          params += "order=#{options[:order]}"
+        end
+
         get_json({ :url => "https://#{API::BTCE_DOMAIN}/api/3/#{operation}/#{pair}#{params}" })
       end
 
